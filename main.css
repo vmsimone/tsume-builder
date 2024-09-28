@@ -15,6 +15,14 @@ main {
     width: 80%;
 }
 
+button {
+    font-size: 56px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
 table {
     margin: 0 auto;
     border: 5px solid black;
@@ -36,6 +44,10 @@ td {
     width: 100px;
     font-size: 84px;
     margin: 0;
+}
+
+td:hover {
+    cursor: pointer;
 }
 
 .header-row {
