@@ -12,7 +12,7 @@ function readyButtons() {
         selectedAnimal = e.currentTarget.value;
         
         $('button.animal').css({'border-color': 'gray', 'transform': 'scale(1)'})
-        $(`button[value=${selectedAnimal}]`).css({'border-color': 'red', 'transform': 'scale(1.5)'})
+        $(`button[value=${selectedAnimal}]`).css({'border-color': 'green', 'transform': 'scale(1.5)'})
     });
 
     $('#flip').on('click', (e) => {
