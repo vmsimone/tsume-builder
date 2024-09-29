@@ -1,4 +1,5 @@
 let selectedAnimal;
+let player = 'sente';
 
 function loadPage() {
     readyButtons();
@@ -14,6 +15,18 @@ function readyButtons() {
         $(`button[value=${selectedAnimal}]`).css({'border-color': 'red', 'transform': 'scale(1.5)'})
     });
 
+    $('#flip').on('click', (e) => {
+        e.preventDefault();
+
+        if(player === 'sente') {
+            player = 'gote';
+            $('button.animal').css('rotate', '180deg');
+        } else {
+            player = 'sente';
+            $('button.animal').css('rotate', '0deg')
+        }  
+    })
+
     $('#reset').on('click', (e) => {
         e.preventDefault();
         $('td').text('');
@@ -26,6 +39,9 @@ function readyGrid() {
         let thisSquareID = e.currentTarget.id;
 
         $(`#${thisSquareID}`).text(selectedAnimal);
+        if(player === 'gote') {
+            $(`#${thisSquareID}`).css('rotate', '180deg');
+        }
     })
 }
 

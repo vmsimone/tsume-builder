@@ -4,7 +4,7 @@ body {
 
 main {
     text-align: center;
-    width: 80%;
+    width: 90%;
 }
 
 button {
@@ -30,19 +30,19 @@ table, th, td {
 table {
     margin: 0 auto;
     border: 5px solid black;
-    width: 415px;
-    height: 415px;
+    width: 675px;
+    height: 805px;
     font: Arial;
     font-size: 24px;
     text-align: center;
 }
 
 tr {
-    height: 30%;
+    height: 16%;
 }
 
 th {
-    width: 30%;
+    width: 19%;
     border: 5px solid black;
     font-size: 24px;
     font-weight: bold;
