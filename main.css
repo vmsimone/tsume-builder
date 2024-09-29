@@ -43,6 +43,17 @@ button#flip:focus {
     outline: none;
 }
 
+button#erase {
+    background-color: lightgrey;
+}
+
+button#erase:hover,
+button#erase:focus {
+    cursor: pointer;
+    border-color: red;
+    outline: none;
+}
+
 button#reset {
     background-color: lightcoral;
 }
