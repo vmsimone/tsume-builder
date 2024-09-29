@@ -6,13 +6,18 @@ function loadPage() {
 }
 
 function readyButtons() {
-    $('button').on('click', (e) => {
-        // $('button').css('border', 'black')
+    $('button.animal').on('click', (e) => {
+        $('button.animal').style = 'border-color: gray';
         e.preventDefault();
         selectedAnimal = e.currentTarget.value;
 
         console.log(selectedAnimal);
-        // e.currentTarget.css('border', 'red');
+        e.currentTarget.style = 'border-color: red';
+    });
+
+    $('#reset').on('click', (e) => {
+        e.preventDefault();
+        $('td').text('');
     })
 }
 

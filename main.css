@@ -23,25 +23,32 @@ button:hover {
     cursor: pointer;
 }
 
+table, th, td {
+    border: 5px dashed black;
+    border-collapse: collapse;
+}
+
 table {
     margin: 0 auto;
     border: 5px solid black;
-    width: 300px;
+    width: 415px;
+    height: 415px;
     font: Arial;
     font-size: 24px;
     text-align: center;
 }
 
 tr {
-    height: 100px;
-    padding: 0;
+    height: 30%;
+}
+
+th {
+    width: 30%;
 }
 
 td {
-    border-left: 5px dashed black;
-    border-bottom: 5px dashed black;
     height: 100px;
-    width: 100px;
+    width: 125px;
     font-size: 84px;
     margin: 0;
 }
@@ -50,19 +57,16 @@ td:hover {
     cursor: pointer;
 }
 
-.header-row {
+.clabels {
     height: 25px;
 }
 
-.top-row td {
-    border-top: 5px dashed black;
-}
-
-.row-label {
+.rowlabel {
     border: none;
     border-left: 5px dashed black;
     font-size: 24px;
     font-weight: bold;
+    width: 40px;
     padding: 10px;
 }
 
