@@ -1,13 +1,5 @@
-html {
-
-}
-
 body {
     margin: 10%;
-}
-
-nav {
-
 }
 
 main {
@@ -17,10 +9,17 @@ main {
 
 button {
     font-size: 56px;
+    border: 3px solid gray;
+    border-radius: 5px;
+    background-color: rgb(239, 239, 239);
+    margin: 0 20px 0 20px;
 }
 
-button:hover {
+button:hover,
+button:focus {
     cursor: pointer;
+    border-color: red;
+    outline: none;
 }
 
 table, th, td {
@@ -44,6 +43,9 @@ tr {
 
 th {
     width: 30%;
+    border: 5px solid black;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 td {
@@ -53,23 +55,16 @@ td {
     margin: 0;
 }
 
-td:hover {
+td:hover,
+td:focus {
     cursor: pointer;
+    background-color: lightgray;
 }
 
 .clabels {
     height: 25px;
 }
 
-.rowlabel {
-    border: none;
-    border-left: 5px dashed black;
-    font-size: 24px;
-    font-weight: bold;
-    width: 40px;
-    padding: 10px;
-}
-
-.row-label td {
-    border: none;
+.rlabels {
+    width: 25px;
 }

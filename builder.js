@@ -7,12 +7,11 @@ function loadPage() {
 
 function readyButtons() {
     $('button.animal').on('click', (e) => {
-        $('button.animal').style = 'border-color: gray';
         e.preventDefault();
         selectedAnimal = e.currentTarget.value;
-
-        console.log(selectedAnimal);
-        e.currentTarget.style = 'border-color: red';
+        
+        $('button.animal').css({'border-color': 'gray', 'transform': 'scale(1)'})
+        $(`button[value=${selectedAnimal}]`).css({'border-color': 'red', 'transform': 'scale(1.5)'})
     });
 
     $('#reset').on('click', (e) => {
