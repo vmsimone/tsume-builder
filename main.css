@@ -6,12 +6,19 @@ main {
     text-align: center;
     width: 80%;
     margin: 0 auto;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
 }
 
 .tools {
     top: 10px;
     position: fixed;
     margin: 0 auto;
+    width: 80%;
     border: 5px solid lightblue;
     border-radius: 10px;
     background: whitesmoke;
@@ -27,7 +34,7 @@ button {
     border: 3px solid gray;
     border-radius: 5px;
     background-color: lightgreen;
-    margin: 0 20px 0 20px;
+    margin: 0 2% 0 2%;
 }
 
 button:hover,
@@ -35,6 +42,16 @@ button:focus {
     cursor: pointer;
     border-color: green;
     outline: none;
+}
+
+.animal.selected {
+    border-color: green;
+    transform: scale(1.5);
+}
+
+button#erase.selected {
+    border-color: red; 
+    transform: scale(1.5);
 }
 
 button#flip {
@@ -107,7 +124,9 @@ button#reset:focus {
     margin-left: 0;
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 5px dashed black;
     border-collapse: collapse;
 }
@@ -157,4 +176,28 @@ td:focus {
 .hand:focus {
     cursor: pointer;
     background-color: lightgray;
+}
+
+@media only screen and (max-width: 940px) {
+    .tools {
+        left: 10px;
+        width: 75px;
+    }
+
+    button {
+        margin: 2% 0 2% 0;
+    }
+
+    .game {
+        margin-top: 10px;
+    }
+
+    .hand {
+        float: none;
+        left: 0;
+        margin: 0;
+        margin-top: 10px;
+        height: 100px;
+        width: 775px;
+    }
 }

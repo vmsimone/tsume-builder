@@ -15,11 +15,14 @@ function readyAnimals() {
         e.preventDefault();
         selectedAnimal = e.currentTarget.value;
         
-        $('button.animal').css({'border-color': 'gray', 'transform': 'scale(1)'});
+        // $('button.animal').css({'border-color': 'gray', 'transform': 'scale(1)'});
+        $('button.animal').removeClass('selected');
+        $('button#erase').removeClass('selected');
+
         if(selectedAnimal === "") {
-            $(`button#erase`).css({'border-color': 'red', 'transform': 'scale(1.5)'})
+            $('button#erase').addClass('selected');
         } else {
-            $(`button[value=${selectedAnimal}]`).css({'border-color': 'green', 'transform': 'scale(1.5)'})
+            $(`button[value=${selectedAnimal}]`).addClass('selected');
         }
     });
 }
