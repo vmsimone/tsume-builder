@@ -15,10 +15,12 @@ main {
 }
 
 .tools {
-    top: 10px;
     position: fixed;
-    margin: 0 auto;
+    top: 10px;
+    left: 15vw;
+    margin: 0;
     width: 80%;
+    max-width: 950px;
     border: 5px solid lightblue;
     border-radius: 10px;
     background: whitesmoke;
@@ -34,7 +36,7 @@ button {
     border: 3px solid gray;
     border-radius: 5px;
     background-color: lightgreen;
-    margin: 0 2% 0 2%;
+    margin: 0 1% 0 1%;
 }
 
 button:hover,
@@ -178,7 +180,14 @@ td:focus {
     background-color: lightgray;
 }
 
-@media only screen and (max-width: 940px) {
+@media only screen and (max-width: 1088px) {
+    .tools {
+        width: 95%;
+        left: 5px;
+    }
+}
+
+@media only screen and (max-width: 960px) {
     .tools {
         left: 10px;
         width: 75px;
