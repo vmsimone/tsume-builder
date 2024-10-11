@@ -1,12 +1,16 @@
 let selectedAnimal;
 let player = 'sente';
+const validHandPieces = ["🐶", "🐱", "🐤"];
 
 function loadPage() {
-    readyButtons();
+    readyAnimals();
+    readyFlip();
+    readyReset();
     readyGrid();
+    readyHand();
 }
 
-function readyButtons() {
+function readyAnimals() {
     $('button.animal').on('click', (e) => {
         e.preventDefault();
         selectedAnimal = e.currentTarget.value;
@@ -18,7 +22,9 @@ function readyButtons() {
             $(`button[value=${selectedAnimal}]`).css({'border-color': 'green', 'transform': 'scale(1.5)'})
         }
     });
+}
 
+function readyFlip() {
     $('#flip').on('click', (e) => {
         e.preventDefault();
 
@@ -30,12 +36,15 @@ function readyButtons() {
             player = 'sente';
             $('button.animal').css('rotate', '0deg')
         }  
-    })
+    });
+}
 
+function readyReset() {
     $('#reset').on('click', (e) => {
         e.preventDefault();
         $('td').text('');
-    })
+        $('.hand').html('');
+    });
 }
 
 function readyGrid() {
@@ -46,6 +55,32 @@ function readyGrid() {
         $(`#${thisSquareID}`).text(selectedAnimal);
         if(player === 'gote') {
             $(`#${thisSquareID}`).css('rotate', '180deg');
+        } else {
+            $(`#${thisSquareID}`).css('rotate', '0deg');
+        }
+    })
+}
+
+function readyHand() {
+    $('.hand').on('click', (e) => {
+        e.preventDefault();
+        let piecesInHand = $(".hand div").length;
+        let isValidHandPiece = validHandPieces.includes(selectedAnimal);
+
+        if(player === 'sente' && piecesInHand < 9 && isValidHandPiece) {
+            $('.hand').append(
+                `<div class="hand-piece">${selectedAnimal}</div>`
+            );
+            readyHandPiece();
+        }
+    })
+}
+
+function readyHandPiece() {
+    $('.hand-piece').on('click', (e) => {
+        e.preventDefault();
+        if(selectedAnimal === "") {
+            e.currentTarget.remove();
         }
     })
 }
