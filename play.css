@@ -1,0 +1,202 @@
+body {
+    margin: 0;
+}
+
+main {
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
+.game {
+    min-width: 850px;
+    margin: 0 auto;
+    margin-top: 125px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hand {
+    border: 5px solid black;
+    border-radius: 5px;
+    width: 300px;
+    height: 300px;
+    margin: 0;
+}
+
+.hand-piece {
+    border: 4px solid black;
+    border-radius: 5px;
+    background: lightcyan;
+    font-size: 56px;
+    width: 75px;
+    height: 75px;
+    margin: 4px;
+    display: inline-block;
+}
+
+.gote-hand {
+    float: left;
+}
+
+.sente-hand {
+    /* display: inline-block; */
+    float: right;
+    margin-top: 340px;
+    margin-left: 0;
+}
+
+table,
+th,
+td {
+    border: 5px dashed black;
+    border-collapse: collapse;
+}
+
+table {
+    margin: 0;
+    display: inline-table;
+    border: 5px solid black;
+    width: 500px;
+    height: 650px;
+    font: Arial;
+    font-size: 18px;
+    text-align: center;
+}
+
+tr {
+    height: 16%;
+}
+
+.sky {
+    background-color: skyblue;
+}
+
+.mountains {
+    background-color: lightgoldenrodyellow;
+}
+
+.forest {
+    background-color: lightgreen;
+}
+
+th {
+    width: 19%;
+    border: 5px solid black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+td {
+    font-size: 56px;
+    margin: 0;
+    position: relative;
+}
+
+td:hover,
+td:focus {
+    cursor: pointer;
+    background-color: lightcoral;
+}
+
+.clabels {
+    height: 20px;
+}
+
+.rlabels {
+    width: 20px;
+}
+
+.sente-hand {
+    background-color: lightgreen;
+}
+
+.gote-hand {
+    background-color: skyblue;
+}
+
+.hand .piece {
+    border: 4px solid black;
+    border-radius: 5px;
+    background: lightcyan;
+    font-size: 56px;
+    width: 75px;
+    height: 75px;
+    margin: 4px;
+    display: inline-block;
+}
+
+.gote {
+    rotate: 180deg;
+}
+
+.selected {
+    transform: scale(1.5);
+}
+
+.possible-move {
+    background-color: coral;
+    border: 2px solid black;
+    border-radius: 100%;
+    width: 56px;
+    height: 56px;
+    position: absolute;
+    top: 20px;
+    left: 16px;
+}
+
+.hand:hover,
+.hand:focus {
+    cursor: pointer;
+    background-color: lightcoral;
+}
+
+.prompt {
+    position: absolute;
+    border: 2px solid black;
+    width: 300px;
+    height: 200px;
+    background-color: white;
+    z-index: 1;
+}
+
+.prompt button {
+    font-size: 32px;
+}
+
+@media only screen and (max-width: 1088px) {
+    .tools {
+        width: 95%;
+        left: 5px;
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .tools {
+        left: 10px;
+        width: 75px;
+    }
+
+    button {
+        margin: 2% 0 2% 0;
+    }
+
+    .game {
+        margin-top: 10px;
+    }
+
+    .hand {
+        float: none;
+        left: 0;
+        margin: 0;
+        margin-top: 10px;
+        height: 100px;
+        width: 775px;
+    }
+}
