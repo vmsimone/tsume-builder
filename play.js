@@ -199,6 +199,7 @@ function readyDrop(pieceSelector) {
     const validDrops = findValidDrops(piece);
 
     highlightValidMoves(validDrops);
+    listenDrops(pieceSelector, validDrops);
 }
 
 function readyMove(position) {
@@ -282,8 +283,17 @@ function listenPromotion(oldSquare, newSquare) {
     });
 }
 
-function listenDrops() {
-    $('')
+function listenDrops(pieceSelector, validDrops) {
+    $('.square').off('click');
+
+    $('.square').on('click', (e) => {
+        const clickedSquare = e.currentTarget.id;
+        const validity = validDrops.indexOf(parseInt(clickedSquare));
+
+        if (validity !== -1) {
+            dropPiece(pieceSelector, clickedSquare);
+        }
+    });
 }
 
 function movePiece(oldSquare, newSquare) {
@@ -319,16 +329,14 @@ function movePiece(oldSquare, newSquare) {
 }
 
 function capturePiece(position) {
-    let piece = GAME_STATE[position].piece;
-    let side = GAME_STATE[position].side;
+    let capturedPiece = GAME_STATE[position].piece;
+    let capturingSide = (GAME_STATE[position].side === 'sente' ? 'gote' : 'sente');
 
-    if (PROMOTED_PIECES.indexOf(piece) !== -1) {
-        piece = capturePromotedPiece(piece);
+    if (PROMOTED_PIECES.indexOf(capturedPiece) !== -1) {
+        capturedPiece = capturePromotedPiece(capturedPiece);
     }
-    GAME_STATE[`${side}-captures`].push(piece);
-    $(`.${side}-hand`).append(`<div class="${side} piece">${piece}</div>`);
-
-    listenDrops();
+    GAME_STATE[`${capturingSide}-captures`].push(capturedPiece);
+    $(`.${capturingSide}-hand`).append(`<div class="${capturingSide} piece">${capturedPiece}</div>`);
 }
 
 function capturePromotedPiece(piece) {
@@ -373,6 +381,34 @@ function promote(thisPiece, position) {
     const promoteTo = promotionHandler(thisPiece);
 
     GAME_STATE[position].piece = promoteTo;
+}
+
+function dropPiece(pieceSelector, position) {
+    $('.square').off('click');
+
+    const piece = $(pieceSelector).text();
+    const side = GAME_STATE['player-turn'];
+
+    $('.previous-move').removeClass('previous-move');
+    $('.possible-move').removeClass('possible-move');
+
+    $(`#${position}`).addClass('previous-move');
+
+    GAME_STATE[position] = {
+        "piece": piece,
+        "side": side
+    };
+
+    pieceSelector.remove();
+
+    //BUGGIN
+    // if(kingIsInCheck(thisSide, thisPiece, newSquare)) {
+    //     console.log('king in check');
+    //     check();
+    // }
+
+    updateHTML();
+    side === 'sente' ? listenGote() : listenSente();
 }
 
 // function findKingPosition(kingSide) {
@@ -461,7 +497,7 @@ function findValidDrops(piece) {
             const pieceExists = GAME_STATE[position].piece;
     
             if (!pieceExists) {
-                validDrops.push(position);
+                validDrops.push(parseInt(position));
             }
         }
     }
@@ -473,7 +509,7 @@ function checkForNifu(player, column) {
         const top = column + 2;
         const bot = column + 6;
         for(i=top;i<=bot;i++) {
-            
+
         }
     }
 }
