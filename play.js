@@ -609,12 +609,15 @@ function findValidDrops(piece) {
     if(GAME_STATE['check'] === false) {
         // NOTE: this works for GoroGoro, because you can't interpose
         // but it won't work in a game with ranged pieces
-        if(piece == '🐤') {
+        if(piece.text() == '🐤') {
             const player = GAME_STATE['player-turn'];
-            for (position in GAME_STATE) {
-    
+            console.log(true);
+            // c for column
+            for(c=1; c<=LEFT_EDGE; c++) {
+                const validThisCol = checkForNifu(player, c)
+                validDrops = [ ...validDrops, ...validThisCol ];
+                console.log(validDrops);
             }
-            // handle nifu
         } else {
             for (position in GAME_STATE) {
                 if(position.length === 2) {
@@ -632,13 +635,39 @@ function findValidDrops(piece) {
 }
 
 function checkForNifu(player, column) {
+    // pawns can't be dropped on the back rank
+    const lastValidRow = (player === 'sente' ? 2 : BOTTOM_ROW - 1);
+    let nifu = false;
+    let validDrops = [];
+    // if gote we go the opposite direction
     if(player === 'sente') {
-        const top = column + 2;
-        const bot = column + 6;
-        for(i=top;i<=bot;i++) {
-
+        // r for row
+        for(r=BOTTOM_ROW;r>=lastValidRow;r--) {
+            let coordinates = `${column}${r}`;
+            let checkPosition = GAME_STATE[coordinates];
+            if(checkPosition.piece === '🐤' && checkPosition.side === player) {
+                nifu = true;
+                validDrops = [];
+                break;
+            } else if(checkPosition.piece == undefined) {
+                validDrops.push(parseInt(coordinates));
+            }
+        }
+    } else {
+        // r for row
+        for(r=1;r<=lastValidRow;r++) {
+            let coordinates = `${column}${r}`;
+            let checkPosition = GAME_STATE[coordinates];
+            if(checkPosition.piece === '🐤' && checkPosition.side === player) {
+                nifu = true;
+                validDrops = [];
+                break;
+            } else if(checkPosition.piece == undefined) {
+                validDrops.push(parseInt(coordinates));
+            }
         }
     }
+    return validDrops;
 }
 
 // MOVEMENT
