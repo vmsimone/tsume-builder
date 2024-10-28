@@ -22,36 +22,6 @@ main {
     box-sizing: border-box;
 }
 
-.hand {
-    border: 5px solid black;
-    border-radius: 5px;
-    width: 300px;
-    height: 300px;
-    margin: 0;
-}
-
-.hand-piece {
-    border: 4px solid black;
-    border-radius: 5px;
-    background: lightcyan;
-    font-size: 56px;
-    width: 75px;
-    height: 75px;
-    margin: 4px;
-    display: inline-block;
-}
-
-.gote-hand {
-    float: left;
-}
-
-.sente-hand {
-    /* display: inline-block; */
-    float: right;
-    margin-top: 340px;
-    margin-left: 0;
-}
-
 table,
 th,
 td {
@@ -113,12 +83,24 @@ td:focus {
     width: 20px;
 }
 
+.hand {
+    border: 5px solid black;
+    border-radius: 5px;
+    width: 300px;
+    height: 300px;
+    margin: 0;
+}
+
 .sente-hand {
     background-color: lightgreen;
+    float: right;
+    margin-top: 340px;
+    margin-left: 0;
 }
 
 .gote-hand {
     background-color: skyblue;
+    float: left;
 }
 
 .hand .piece {
@@ -130,6 +112,17 @@ td:focus {
     height: 75px;
     margin: 4px;
     display: inline-block;
+    position: relative;
+}
+
+/* .sente-hand .piece {
+    background: forestgreen;
+} */
+
+.hand .piece:hover,
+.hand .piece:focus {
+    cursor: pointer;
+    background-color: lightcoral;
 }
 
 .gote {
@@ -138,6 +131,7 @@ td:focus {
 
 .selected {
     transform: scale(1.5);
+    z-index: 1;
 }
 
 .possible-move {
@@ -149,12 +143,6 @@ td:focus {
     position: absolute;
     top: 20px;
     left: 16px;
-}
-
-.hand:hover,
-.hand:focus {
-    cursor: pointer;
-    background-color: lightcoral;
 }
 
 .prompt {

@@ -320,7 +320,6 @@ function movePiece(oldSquare, newSquare) {
     };
 
     if(kingIsInCheck(newSquare)) {
-        console.log('king in check');
         GAME_STATE['check'] = true;
         GAME_STATE['check-origin'] = newSquare;
     } else {
@@ -406,7 +405,6 @@ function dropPiece(pieceSelector, position) {
     pieceSelector.remove();
 
     if(kingIsInCheck(position)) {
-        console.log('king in check');
         GAME_STATE['check'] = true;
         GAME_STATE['check-origin'] = position;
     }
@@ -611,12 +609,10 @@ function findValidDrops(piece) {
         // but it won't work in a game with ranged pieces
         if(piece.text() == '🐤') {
             const player = GAME_STATE['player-turn'];
-            console.log(true);
             // c for column
             for(c=1; c<=LEFT_EDGE; c++) {
                 const validThisCol = checkForNifu(player, c)
                 validDrops = [ ...validDrops, ...validThisCol ];
-                console.log(validDrops);
             }
         } else {
             for (position in GAME_STATE) {
