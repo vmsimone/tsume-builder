@@ -374,7 +374,7 @@ function promptPromotion(oldSquare, newSquare) {
 
     thisSquare.append(`
     <div class="prompt">
-        <button id="cancel">${piece}</button> => <button id="confirm">${promotionHandler(piece)}</button>?
+        <button id="cancel">${piece}</button>|<button id="confirm">${promotionHandler(piece)}</button>
     </div>
     `);
     $('.prompt').fadeIn('fast');
