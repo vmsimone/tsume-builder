@@ -45,6 +45,7 @@ const PIECES = [chick, cat, dog, lion];
 const PROMOTABLE_PIECES = ['🐤', '🐱'];
 const PROMOTED_PIECES = ['🐔', '😽'];
 
+const LEFT_EDGE = 5, BOTTOM_ROW = 6;
 
 const GAME_STATE = {
     "11": '',
@@ -79,7 +80,9 @@ const GAME_STATE = {
     "56": '',
     "sente-captures": [],
     "gote-captures": [],
-    "player-turn": "sente"
+    "player-turn": "sente",
+    "check": false,
+    "check-origin": null
 }
 
 function newGame() {
@@ -150,18 +153,22 @@ function newGame() {
     GAME_STATE["sente-captures"] = [];
     GAME_STATE["gote-captures"] = [];
     GAME_STATE["player-turn"] = "sente";
-    
+    GAME_STATE["player-turn"] = "false";
+    GAME_STATE["check-origin"] = "false";
+
     updateHTML();
 }
 
 function updateHTML() {
     for (position in GAME_STATE) {
-        const pieceExists = GAME_STATE[position].piece;
-
-        if (pieceExists) {
-            displayPiece(position);
-        } else {
-            $(`#${position}`).html('');
+        if(position.length === 2) {
+            const pieceExists = GAME_STATE[position].piece;
+    
+            if (pieceExists) {
+                displayPiece(position);
+            } else {
+                $(`#${position}`).html('');
+            }
         }
     }
 }
@@ -210,10 +217,12 @@ function readyMove(position) {
 }
 
 function highlightValidMoves(movesArray) {
-    movesArray.forEach(move => {
-        const thisSquare = $(`#${move}`);
-        thisSquare.append(`<div class='possible-move'></div>`);
-    });
+    if(movesArray.length > 0) {
+        movesArray.forEach(move => {
+            const thisSquare = $(`#${move}`);
+            thisSquare.append(`<div class='possible-move'></div>`);
+        });
+    }
 }
 
 //listeners
@@ -266,18 +275,10 @@ function listenPromotion(oldSquare, newSquare) {
         promote(piece, oldSquare);
         movePiece(oldSquare, newSquare);
 
-        if (kingIsInCheck(GAME_STATE[square].side, piece, square)) {
-            check();
-        }
-
         $('.prompt').fadeOut('instant');
     });
     $('#cancel').on('click', () => {
         movePiece(oldSquare, newSquare);
-
-        if (kingIsInCheck(GAME_STATE[square].side, piece, square)) {
-            check();
-        }
 
         $('.prompt').fadeOut('instant');
     });
@@ -318,11 +319,14 @@ function movePiece(oldSquare, newSquare) {
         "side": side
     };
 
-    //BUGGIN
-    // if(kingIsInCheck(thisSide, thisPiece, newSquare)) {
-    //     console.log('king in check');
-    //     check();
-    // }
+    if(kingIsInCheck(newSquare)) {
+        console.log('king in check');
+        GAME_STATE['check'] = true;
+        GAME_STATE['check-origin'] = newSquare;
+    } else {
+        GAME_STATE['check'] = false;
+        GAME_STATE['check-origin'] = null;
+    }
 
     updateHTML();
     side === 'sente' ? listenGote() : listenSente();
@@ -401,37 +405,40 @@ function dropPiece(pieceSelector, position) {
 
     pieceSelector.remove();
 
-    //BUGGIN
-    // if(kingIsInCheck(thisSide, thisPiece, newSquare)) {
-    //     console.log('king in check');
-    //     check();
-    // }
+    if(kingIsInCheck(position)) {
+        console.log('king in check');
+        GAME_STATE['check'] = true;
+        GAME_STATE['check-origin'] = position;
+    }
 
     updateHTML();
     side === 'sente' ? listenGote() : listenSente();
 }
 
-// function findKingPosition(kingSide) {
-//     const allBoardSquares = Object.keys(GAME_STATE);
-//     for (i = 0; i <= allBoardSquares.length; i++) {
-//         let thisSquare = allBoardSquares[i];
-//         if (GAME_STATE[thisSquare].piece === '🦁' && GAME_STATE[thisSquare].side === kingSide) {
-//             return thisSquare;
-//         }
-//     }
-// }
+function kingIsInCheck(thisMove) {
+    // NOTE: this works for GoroGoro, because there are no discovered checks
+    // but it won't work in a game with ranged pieces
+    const side = GAME_STATE[thisMove].side;
+    const nextMoves = findValidMoves(thisMove);
 
-// function kingIsInCheck(lastMovedSide, lastMovedPiece, currentPosition) {
-//     const nextMoves = movementHandler(lastMovedPiece, lastMovedSide, currentPosition);
-//     const kingSide = (lastMovedSide = 'sente' ? 'gote' : 'sente');
-//     const kingPosition = parseInt(findKingPosition(kingSide));
+    let isCheck = false;
+    
+    let i = 0;
+    while (i<nextMoves.length) {
+        const move = nextMoves[i];
+        
+        const kingExists = GAME_STATE[move].piece === '🦁';
+        const isEnemyKing = GAME_STATE[move].side !== side;
 
-//     if (nextMoves.indexOf(kingPosition) !== -1) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
+        if(kingExists && isEnemyKing) {
+            isCheck = true;
+            break;
+        }
+        i++;
+    }
+
+    return isCheck;
+}
 
 function movementHandler(piece, square) {
     switch (piece) {
@@ -461,46 +468,166 @@ function promotionHandler(piece) {
 
 //rework this
 function findValidMoves(square) {
-    let validMoves = [];
-    let possibleMoves = [];
-
     const piece = GAME_STATE[square].piece;
     const side = GAME_STATE[square].side;
+    
+    const validMoves = movementHandler(piece, square);
+    let possibleMoves = [];
 
-    for (i = 0; i < PIECES.length; i++) {
-        if (PIECES[i].displayName === piece) {
-            console.log(PIECES[i].displayName);
+    // for (i = 0; i < PIECES.length; i++) {
+    //     if (PIECES[i].displayName === piece) {
+    //         console.log(PIECES[i].displayName);
+    //     }
+    // }
+
+    // kings can't move into check
+    if(piece === '🦁') {
+        const threatenedSquares = checkKingThreats(square);
+        //make sure king is not blocked by own pieces, moving off the board, or moving into check
+        validMoves.forEach(move => {
+            if (
+                GAME_STATE[move] !== undefined 
+                && GAME_STATE[move].side !== side
+                && threatenedSquares.indexOf(move) === -1
+            ) {
+                possibleMoves.push(move);
+            }
+        });
+    } else if(GAME_STATE['check'] === false) {
+        //make sure pieces are not blocked by own pieces or moving off the board
+        validMoves.forEach(move => {
+            if (GAME_STATE[move] !== undefined && GAME_STATE[move].side !== side) {
+                possibleMoves.push(move);
+            }
+        });
+    } else {
+        const checkingPiecePosition = parseInt(GAME_STATE['check-origin']);
+        const possibleMoveIndex = validMoves.indexOf(checkingPiecePosition);
+        if(possibleMoveIndex !== -1) {
+            possibleMoves.push(validMoves[possibleMoveIndex]);
         }
     }
 
-    validMoves = movementHandler(piece, square);
+    return possibleMoves;
+}
 
-    //make sure pieces are not blocked by own pieces or moving off the board
-    validMoves.forEach(move => {
-        if (GAME_STATE[move] !== undefined && GAME_STATE[move].side !== side) {
-            possibleMoves.push(move);
+function checkKingThreats(kingSquare) {
+    // NOTE: works for goro etc blah blah blah disclaimer
+    const kingSide = GAME_STATE[kingSquare].side;
+    let kingMoves = ouMoves(kingSquare);
+    let threatenedSquares = [];
+
+    kingMoves.forEach(move => {
+        // ignore if off the edge or own piece
+        if (GAME_STATE[move] !== undefined && GAME_STATE[move].side !== kingSide) {
+            // check surrounding squares of each sqaure
+            ouMoves(move).forEach(space => {
+                // ignore if off the edge, own piece, no piece, and own square
+                if (
+                    GAME_STATE[space] !== undefined 
+                    && GAME_STATE[space] !== kingSquare
+                    && GAME_STATE[space].piece !== undefined 
+                    && GAME_STATE[space].side !== kingSide
+                ) {
+                    if(threatHandler(space - move, space)) {
+                        threatenedSquares.push(move);
+                        // should break inner loop
+                    }
+                }
+            })
         }
     });
-    return possibleMoves;
+    return threatenedSquares;
+}
+
+function threatHandler(direction, destination) {
+    // attacker info
+    const piece = GAME_STATE[destination].piece;
+    const side = GAME_STATE[destination].side;
+
+    switch(direction) {
+        case 11:
+            if(['🐱','🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'sente') {
+                return true;
+            } else if(['🐱'].indexOf(piece) !== -1 && side === 'gote') {
+                return true;
+            }
+            break;
+        case 10:
+            if(['🐶','🦁','🐔', '😽'].indexOf(piece) !== -1) {
+                return true;
+            }
+            break;
+        case 9:
+            if(['🐱'].indexOf(piece) !== -1 && side === 'sente') {
+                return true;
+            } else if(['🐱','🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'gote') {
+                return true;
+            }
+            break;
+        case 1:
+            if(['🐤','🐱','🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'sente') {
+                return true;
+            } else if(['🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'gote') {
+                return true;
+            }
+            break;
+        case -1:
+            if(['🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'sente') {
+                return true;
+            } else if(['🐤','🐱','🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'gote') {
+                return true;
+            }
+            break;
+        case -9:
+            if(['🐱','🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'sente') {
+                return true;
+            } else if(['🐱'].indexOf(piece) !== -1 && side === 'gote') {
+                return true;
+            }
+            break;
+        case -10:
+            if(['🐶','🦁','🐔', '😽'].indexOf(piece) !== -1) {
+                return true;
+            }
+            break;
+        case -11:
+            if(['🐱'].indexOf(piece) !== -1 && side === 'sente') {
+                return true;
+            } else if(['🐱','🐶','🦁','🐔', '😽'].indexOf(piece) !== -1 && side === 'gote') {
+                return true;
+            }
+            break;
+        default:
+            return false;
+    }
 }
 
 function findValidDrops(piece) {
     let validDrops = [];
-    if(piece == '🐤') {
-        const player = GAME_STATE['player-turn'];
-        for (position in GAME_STATE) {
-
-        }
-        // handle nifu
-    } else {
-        for (position in GAME_STATE) {
-            const pieceExists = GAME_STATE[position].piece;
     
-            if (!pieceExists) {
-                validDrops.push(parseInt(position));
+    if(GAME_STATE['check'] === false) {
+        // NOTE: this works for GoroGoro, because you can't interpose
+        // but it won't work in a game with ranged pieces
+        if(piece == '🐤') {
+            const player = GAME_STATE['player-turn'];
+            for (position in GAME_STATE) {
+    
+            }
+            // handle nifu
+        } else {
+            for (position in GAME_STATE) {
+                if(position.length === 2) {
+                    const pieceExists = GAME_STATE[position].piece;
+            
+                    if (!pieceExists) {
+                        validDrops.push(parseInt(position));
+                    }
+                }
             }
         }
     }
+    
     return validDrops;
 }
 
@@ -514,12 +641,23 @@ function checkForNifu(player, column) {
     }
 }
 
-function check() {
-    $('body').append(`<div class="prompt">王手</div>`);
-    $('.prompt').fadeIn('fast');
-    $('.prompt').delay(1000).fadeOut('fast');
-}
+// MOVEMENT
+// function checkBounds(currentPosition) {
+//     let onTopRow = (currentPosition % 10 === 1);
+//     let onBotRow = (currentPosition % 10 === BOTTOM_ROW);
+//     let onRightEdge = (Math.floor(currentPosition) === 10);
+//     let onLeftEdge = (Math.floor(currentPosition) === LEFT_EDGE);
 
+//     if(onTopRow && onRightEdge) {
+//         return 'topRightCorner';
+//     } else if(onBotRow && onRightEdge) {
+//         return 'botRightCorner';
+//     } else if(onTopRow && onLeftEdge) {
+//         return 'topLeftCorner';
+//     } else if(onBotRow && onLeftEdge) {
+//         return 'botLeftCorner';
+//     }
+// }
 
 function moveUp(currentPosition) {
     return currentPosition - 1;
@@ -567,7 +705,7 @@ function fuMoves(position) {
 }
 
 function ginMoves(position) {
-    let origin = parseInt(position);
+    const origin = parseInt(position);
     if (GAME_STATE["player-turn"] === 'sente') {
         return [
             moveUp(origin),
