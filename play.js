@@ -231,6 +231,7 @@ function listenSente() {
 
     $('.gote.piece').off('click');
     $('.sente.piece').on('click', (e) => {
+        $('.prompt').remove();
         selectPiece(e.currentTarget);
     });
 }
@@ -240,6 +241,7 @@ function listenGote() {
 
     $('.sente.piece').off('click');
     $('.gote.piece').on('click', (e) => {
+        $('.prompt').remove();
         selectPiece(e.currentTarget);
     });
 }
