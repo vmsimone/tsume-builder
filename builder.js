@@ -1,6 +1,6 @@
 let selectedAnimal;
 let player = 'sente';
-const validHandPieces = ["🐶", "🐱", "🐤"];
+const validHandPieces = ["🐶", "🐱", "🐤", "飛", "角", "金", "銀", "桂", "香", "歩" ];
 
 function loadPage() {
     readyAnimals();

@@ -12,6 +12,7 @@ main {
     /* IE 10 and IE 11 */
     user-select: none;
     /* Standard syntax */
+    font-family: "Noto Sans JP", sans-serif;
 }
 
 .tools {
@@ -33,6 +34,7 @@ img {
 
 button {
     font-size: 42px;
+    font-family: "Noto Sans JP", sans-serif;
     border: 3px solid gray;
     border-radius: 5px;
     background-color: lightgreen;

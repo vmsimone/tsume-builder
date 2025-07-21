@@ -1,0 +1,93 @@
+main {
+    width: 100%;
+}
+
+.tools {
+    width: 95%;
+    left: 2.5%;
+    max-width: 100%;
+}
+
+button {
+    background-color: lightgoldenrodyellow;
+    margin-left: 5px;
+}
+
+button img {
+    width: 80%;
+    height: 80%;
+    margin: 0 auto;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.game {
+    width: 1200px;
+    margin: 0 auto;
+    margin-top: 125px;
+    padding: 0;
+}
+ 
+.hand {
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 75px;
+    height: 500px;
+    margin: 0;
+}
+
+.hand-piece {
+    border: none;
+    background: none;
+    font-size: 40px;
+    width: 50px;
+    height: 50px;
+    margin: 4px;
+    display: inline-block;
+}
+
+.gote {
+    float: left;
+}
+
+.sente {
+    float: right;
+    margin-top: 245px;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    margin: 0;
+    display: inline-table;
+    table-layout: fixed;
+    border: 2px solid black;
+    width: 675px;
+    height: 675px;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 18px;
+    text-align: center;
+}
+
+tr {
+    height: 80px;
+}
+
+th {
+    width: 75px;
+    border: 2px solid black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+td {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 40px;
+    margin: 0;
+    padding: 0;
+}
