@@ -22,37 +22,46 @@ button img {
 }
 
 .game {
-    width: 1200px;
+    width: 900px;
     margin: 0 auto;
-    margin-top: 125px;
+    margin-top: 105px;
     padding: 0;
 }
  
 .hand {
-    border: 2px solid black;
-    border-radius: 5px;
-    width: 75px;
-    height: 500px;
+    border: none;
+    width: 40px;
+    height: 200px;
     margin: 0;
+}
+
+.hand-label {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: normal;
+    font-size: 36px;
+    text-align: center;
 }
 
 .hand-piece {
     border: none;
     background: none;
-    font-size: 40px;
-    width: 50px;
-    height: 50px;
-    margin: 4px;
+    font-size: 36px;
+    width: auto;
+    height: auto;
+    margin: 0;
     display: inline-block;
 }
 
 .gote {
     float: left;
+    margin-right: -75px;
+    margin-top: 50px; /* variable */
+    transform: rotate(180deg);
 }
 
 .sente {
     float: right;
-    margin-top: 245px;
+    margin-top: 582px; /* variable */
 }
 
 table,
@@ -60,34 +69,52 @@ th,
 td {
     border: 1px solid black;
     border-collapse: collapse;
+    font-family: "Noto Sans JP", sans-serif;
+    padding: 0;
 }
 
 table {
     margin: 0;
     display: inline-table;
     table-layout: fixed;
-    border: 2px solid black;
+    border: none;
     width: 675px;
     height: 675px;
-    font-family: "Noto Sans JP", sans-serif;
     font-size: 18px;
     text-align: center;
 }
 
 tr {
-    height: 80px;
+    height: 82px;
 }
 
 th {
     width: 75px;
-    border: 2px solid black;
+    border: none;
+    border-bottom: 3px solid black;
     font-size: 18px;
-    font-weight: bold;
 }
 
 td {
-    font-family: "Noto Sans JP", sans-serif;
-    font-size: 40px;
+    font-size: 56px;
     margin: 0;
-    padding: 0;
+}
+
+.clabels > th, .rlabel {
+    font-size: 32px;
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: normal;
+}
+
+.rlabel {
+    border-left: 3px solid black;
+    padding-left: 15px;
+}
+
+.left-edge {
+    border-left: 3px solid black;
+}
+
+.bottom-edge {
+    border-bottom: 3px solid black;
 }
