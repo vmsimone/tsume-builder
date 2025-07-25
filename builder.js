@@ -31,6 +31,116 @@ const goteHand = {
     "香": 0,
     "歩": 0
 };
+let board = {
+    "11": " ・",
+    "12": " ・",
+    "13": " ・",
+    "14": " ・",
+    "15": " ・",
+    "16": " ・",
+    "17": " ・",
+    "18": " ・",
+    "19": " ・",
+    "21": " ・",
+    "22": " ・",
+    "23": " ・",
+    "24": " ・",
+    "25": " ・",
+    "26": " ・",
+    "27": " ・",
+    "28": " ・",
+    "29": " ・",
+    "31": " ・",
+    "32": " ・",
+    "33": " ・",
+    "34": " ・",
+    "35": " ・",
+    "36": " ・",
+    "37": " ・",
+    "38": " ・",
+    "39": " ・",
+    "41": " ・",
+    "42": " ・",
+    "43": " ・",
+    "44": " ・",
+    "45": " ・",
+    "46": " ・",
+    "47": " ・",
+    "48": " ・",
+    "49": " ・",
+    "51": " ・",
+    "52": " ・",
+    "53": " ・",
+    "54": " ・",
+    "55": " ・",
+    "56": " ・",
+    "57": " ・",
+    "58": " ・",
+    "59": " ・",
+    "61": " ・",
+    "62": " ・",
+    "63": " ・",
+    "64": " ・",
+    "65": " ・",
+    "66": " ・",
+    "67": " ・",
+    "68": " ・",
+    "69": " ・",
+    "71": " ・",
+    "72": " ・",
+    "73": " ・",
+    "74": " ・",
+    "75": " ・",
+    "76": " ・",
+    "77": " ・",
+    "78": " ・",
+    "79": " ・",
+    "81": " ・",
+    "82": " ・",
+    "83": " ・",
+    "84": " ・",
+    "85": " ・",
+    "86": " ・",
+    "87": " ・",
+    "88": " ・",
+    "89": " ・",
+    "91": " ・",
+    "92": " ・",
+    "93": " ・",
+    "94": " ・",
+    "95": " ・",
+    "96": " ・",
+    "97": " ・",
+    "98": " ・",
+    "99": " ・"
+}
+
+let goteHandKifu = 'なし';
+let boardKifu = 
+`
+|${board['91']}${board['81']}${board['71']}${board['61']}${board['51']}${board['41']}${board['31']}${board['21']}${board['11']}|一
+|${board['92']}${board['82']}${board['72']}${board['62']}${board['52']}${board['42']}${board['32']}${board['22']}${board['12']}|二
+|${board['93']}${board['83']}${board['73']}${board['63']}${board['53']}${board['43']}${board['33']}${board['23']}${board['13']}|三
+|${board['94']}${board['84']}${board['74']}${board['64']}${board['54']}${board['44']}${board['34']}${board['24']}${board['14']}|四
+|${board['95']}${board['85']}${board['75']}${board['65']}${board['55']}${board['45']}${board['35']}${board['25']}${board['15']}|五
+|${board['96']}${board['86']}${board['76']}${board['66']}${board['56']}${board['46']}${board['36']}${board['26']}${board['16']}|六
+|${board['97']}${board['87']}${board['77']}${board['67']}${board['57']}${board['47']}${board['37']}${board['27']}${board['17']}|七
+|${board['98']}${board['88']}${board['78']}${board['68']}${board['58']}${board['48']}${board['38']}${board['28']}${board['18']}|八
+|${board['99']}${board['89']}${board['79']}${board['69']}${board['59']}${board['49']}${board['39']}${board['29']}${board['19']}|九
+`;
+let senteHandKifu = 'なし';
+
+let kifu = `
+後手の持駒：${goteHandKifu}
+  ９ ８ ７ ６ ５ ４ ３ ２ １
++---------------------------+
+${boardKifu}
++---------------------------+
+先手の持駒：${senteHandKifu}
+先手：
+後手：
+手数----指手---------消費時間--
+`;
 
 function loadPage() {
     readyAnimals();
@@ -89,6 +199,20 @@ function readyReset() {
         Object.keys(goteHand).forEach(key => {
             goteHand[key] = 0;
         });
+
+        resetKifu();
+    });
+}
+
+function readyKif() {
+    $('#kif').on('click', (e) => {
+        e.preventDefault();
+        //copy kifu to clipboard
+        navigator.clipboard.writeText(kifu);
+        alert('KIF copied to clipboard');
+
+        // $('#kif').attr('href', `data:text/plain;charset=UTF-8,${kifu}`);
+        // $('#kif').attr('download', 'kifu.kif');
     });
 }
 
@@ -100,8 +224,10 @@ function readyGrid() {
         $(`#${thisSquareID}`).text(selectedAnimal);
         if(player === 'gote') {
             $(`#${thisSquareID}`).css('rotate', '180deg');
+            updateKifu('gote', selectedAnimal, thisSquareID);
         } else {
             $(`#${thisSquareID}`).css('rotate', '0deg');
+            updateKifu('sente', selectedAnimal, thisSquareID);
         }
     })
 }
@@ -118,13 +244,15 @@ function readyHand() {
             );
             if(hand === 'sente') {
                 senteHand[selectedAnimal]++;
+                updateKifu('sente', selectedAnimal, 'sh');
             } else {
                 goteHand[selectedAnimal]++;
+                updateKifu('gote', selectedAnimal, 'gh');
             }
             updateHand(hand);
             readyHandPiece();
         }
-    })
+    });
 }
 
 function updateHand(player) {
@@ -177,6 +305,179 @@ function readyHandPiece() {
             e.currentTarget.remove();
         }
     })
+}
+
+function updateKifu(player, piece, squareID) {
+    if(squareID == "sh") {
+        senteHandKifu = '';
+        Object.keys(senteHand).forEach(key => {
+            if(senteHand[key] == 1) {
+                senteHandKifu += key;
+            } else if(senteHand[key] > 1) {
+                senteHandKifu += key + kanji_numbers[senteHand[key]];
+            }
+        });
+        if(senteHandKifu == '') {
+            senteHandKifu = 'なし';
+        }
+    } else if(squareID == "gh") {
+        goteHandKifu = '';
+        Object.keys(goteHand).forEach(key => {
+            if(goteHand[key] == 1) {
+                goteHandKifu += key;
+            } else if(goteHand[key] > 1) {
+                goteHandKifu += key + kanji_numbers[goteHand[key]];
+            }
+        });
+        if(goteHandKifu == '') {
+            goteHandKifu = 'なし';
+        }
+    } else if(piece == "") {
+        board[squareID] = " ・";
+    } else {
+        if(player === 'sente') {
+            board[squareID] = " " + piece;
+        } else {
+            board[squareID] = "v" + piece;
+        }
+    }
+    boardKifu = 
+    `
+    |${board['91']}${board['81']}${board['71']}${board['61']}${board['51']}${board['41']}${board['31']}${board['21']}${board['11']}|一
+    |${board['92']}${board['82']}${board['72']}${board['62']}${board['52']}${board['42']}${board['32']}${board['22']}${board['12']}|二
+    |${board['93']}${board['83']}${board['73']}${board['63']}${board['53']}${board['43']}${board['33']}${board['23']}${board['13']}|三
+    |${board['94']}${board['84']}${board['74']}${board['64']}${board['54']}${board['44']}${board['34']}${board['24']}${board['14']}|四
+    |${board['95']}${board['85']}${board['75']}${board['65']}${board['55']}${board['45']}${board['35']}${board['25']}${board['15']}|五
+    |${board['96']}${board['86']}${board['76']}${board['66']}${board['56']}${board['46']}${board['36']}${board['26']}${board['16']}|六
+    |${board['97']}${board['87']}${board['77']}${board['67']}${board['57']}${board['47']}${board['37']}${board['27']}${board['17']}|七
+    |${board['98']}${board['88']}${board['78']}${board['68']}${board['58']}${board['48']}${board['38']}${board['28']}${board['18']}|八
+    |${board['99']}${board['89']}${board['79']}${board['69']}${board['59']}${board['49']}${board['39']}${board['29']}${board['19']}|九
+    `;
+
+    kifu = `
+        後手の持駒：${goteHandKifu}
+        ９ ８ ７ ６ ５ ４ ３ ２ １
+        +---------------------------+
+        ${boardKifu}
+        +---------------------------+
+        先手の持駒：${senteHandKifu}
+        先手：
+        後手：
+        手数----指手---------消費時間--
+    `;
+    console.log(kifu);
+    readyKif();
+}
+
+function resetKifu() {
+    board = {
+        "11": " ・",
+        "12": " ・",
+        "13": " ・",
+        "14": " ・",
+        "15": " ・",
+        "16": " ・",
+        "17": " ・",
+        "18": " ・",
+        "19": " ・",
+        "21": " ・",
+        "22": " ・",
+        "23": " ・",
+        "24": " ・",
+        "25": " ・",
+        "26": " ・",
+        "27": " ・",
+        "28": " ・",
+        "29": " ・",
+        "31": " ・",
+        "32": " ・",
+        "33": " ・",
+        "34": " ・",
+        "35": " ・",
+        "36": " ・",
+        "37": " ・",
+        "38": " ・",
+        "39": " ・",
+        "41": " ・",
+        "42": " ・",
+        "43": " ・",
+        "44": " ・",
+        "45": " ・",
+        "46": " ・",
+        "47": " ・",
+        "48": " ・",
+        "49": " ・",
+        "51": " ・",
+        "52": " ・",
+        "53": " ・",
+        "54": " ・",
+        "55": " ・",
+        "56": " ・",
+        "57": " ・",
+        "58": " ・",
+        "59": " ・",
+        "61": " ・",
+        "62": " ・",
+        "63": " ・",
+        "64": " ・",
+        "65": " ・",
+        "66": " ・",
+        "67": " ・",
+        "68": " ・",
+        "69": " ・",
+        "71": " ・",
+        "72": " ・",
+        "73": " ・",
+        "74": " ・",
+        "75": " ・",
+        "76": " ・",
+        "77": " ・",
+        "78": " ・",
+        "79": " ・",
+        "81": " ・",
+        "82": " ・",
+        "83": " ・",
+        "84": " ・",
+        "85": " ・",
+        "86": " ・",
+        "87": " ・",
+        "88": " ・",
+        "89": " ・",
+        "91": " ・",
+        "92": " ・",
+        "93": " ・",
+        "94": " ・",
+        "95": " ・",
+        "96": " ・",
+        "97": " ・",
+        "98": " ・",
+        "99": " ・"
+    };
+    goteHandKifu = 'なし';
+    senteHandKifu = 'なし';
+    boardKifu = 
+    `
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|一
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|二
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|三
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|四
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|五
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|六
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|七
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|八
+    | ・ ・ ・ ・ ・ ・ ・ ・ ・|九
+    `;
+    kifu = `
+        後手の持駒：${goteHandKifu}
+        ９ ８ ７ ６ ５ ４ ３ ２ １
+        +---------------------------+
+        ${boardKifu}
+        +---------------------------+
+        先手の持駒：${senteHandKifu}
+        先手：
+        後手：
+        手数----指手---------消費時間--
+    `;
 }
 
 $(loadPage);
